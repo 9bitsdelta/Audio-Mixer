@@ -1,0 +1,501 @@
+\input{preamble.tex}
+\input{acronyms.tex}
+\addbibresource{cite.bib}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --- TITLE PAGE ------------------------------------------------------------- %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\raggedbottom
+\pagenumbering{arabic}
+\pagestyle{empty}
+
+\begin{titlepage}
+    \center
+    {\large National University of Science and Technology
+    \textsc{Politehnica} Bucharest\\
+    Faculty of Electronics, Telecommunications and Information Technology
+    }
+
+    \vfill\vfill
+
+    {\LARGE \bf Three Stereo Channel Audio Mixer}
+
+    \vfill\vfill
+    {
+        {\HUGE \bf Diploma Project}\\
+        {\Large
+        presented as a partial requirement towards obtaining
+        the title of\\
+        {\it Engineer} in the field
+        {\it Electronics and Telecommunications},\\
+        study program
+        {\it Telecommunication systems and technologies}
+        }
+    }
+
+    \vfill\vfill
+
+    \begin{minipage}[t]{0.49\textwidth}
+        \flushleft \large
+        Scientific Coordinators\\
+        Prof. dr. ing. Monica \textsc{Dascălu}\\
+        As. drd. ing. Costin-Andrei \textsc{Brătan}
+    \end{minipage}
+    ~
+    \begin{minipage}[t]{0.49\textwidth}
+        \flushright \large
+        Graduate\\
+        Vlad-Ștefan \textsc{Moreanu}
+    \end{minipage}
+
+    \vfill\vfill\vfill
+
+    {\Large 2024}
+\end{titlepage}
+
+\emptypage{
+
+\noindent
+\begin{minipage}[t]{0.49\textwidth}
+\flushleft
+University “Politehnica” of Bucharest
+Faculty of Electronics, Telecommunications and Information Technology
+Study program TST
+\end{minipage}
+~
+\begin{minipage}[t]{0.49\textwidth}
+\flushright
+Anexa 1
+\end{minipage}
+
+\vfill
+
+\begin{center}
+DIPLOMA THESIS\\
+of student MOREANU P.D. Vlad-Ştefan, 441G
+\end{center}
+
+\vfill\noindent
+1. Thesis title: Three stereo channel audio mixer/ Mixer audio stereo
+
+\vfill\noindent
+2. The student’s original contribution will consist of (not including the
+documentation part) and design specifications:
+The purpose of the project is the practical implementation, with discrete
+components of the audio mixer with output of both the mixed analog audio and
+channel inputs as digital signals, meant to be transferred via USB to a PC
+workstation for digital processing. Each channel will have a three band
+equalisation stage (before mixing) and the analog to digital conversion will
+respect the CD Audio standard specifications.
+
+\noindent
+For simulations an adequate software will be used (e.g. LTspice, SIMetrix,
+OrCAD) and for the PCB a CAD-type software will be used (e.g. KiCAD, OrCAD).
+
+\noindent
+//
+
+\noindent
+Scopul lucrarii este realizarea practica, cu componente discrete, a mixerului
+cu 3 canale, cu output audio analog si conversia semnalelor de le fiecare canal
+in format digital si trimiterea semnalelor digitale catre PC pentru procesare
+digitala. Fiecare canal va avea etaj de pre-amplificare cu egalizare pe 3
+benzi. Conversia anolgica digitala se va realiza conform specificatiei standard
+CD Audio.
+
+\noindent
+Pentru simulari se va volosi un software adecvat (e.g. LTspice, SIMetrix,
+OrCAD) si pentru realizarea PCB-ului se va folosi un software de tip CAD
+adecvat (e.g. KiCAD, OrCAD).
+
+
+\vfill\noindent
+3. Academic courses the thesis is based on:
+SS (Signals and systems), CAS (Circuit analysis and synthesis), AIC (Analog
+integrated circuits), DC (Data communications)
+
+\vfill\noindent
+4. Thesis registration date: 2023-12-19 17:58:42
+
+\vfill\noindent
+\begin{minipage}[t]{0.49\textwidth}
+\flushleft
+Thesis advisor(s),\\
+Prof. dr. ing. Monica DASCĂLU\\
+as. Costin-Andrei Brătan\\
+\end{minipage}
+~
+\begin{minipage}[t]{0.49\textwidth}
+\flushright
+Student,\\
+MOREANU P.D. Vlad-Ştefan
+\end{minipage}
+
+\vfill\noindent
+\begin{minipage}[t]{0.49\textwidth}
+\flushleft
+Departament director,
+\end{minipage}
+~
+\begin{minipage}[t]{0.49\textwidth}
+\flushright
+Dean,\\
+Prof. dr. ing. Mihnea UDREA
+\end{minipage}
+
+
+\vfill\noindent
+Validation code: 46c379be24
+}
+
+\emptypage{
+
+\noindent
+\begin{minipage}[t]{\textwidth}
+\flushright
+Anexa 5
+\end{minipage}
+
+\vfill
+
+\begin{center}
+    \Large Declarație de onestitate academică
+\end{center}
+
+\large
+
+\vfill
+
+Prin prezenta declar că lucrarea cu titlul “Mixer audio stereo”,
+prezentată în cadrul Facultății de Electronică, Telecomunicații și Tehnologia
+Informației a Universității “Politehnica” din București ca cerință parțială pentru
+obținerea titlului de Inginer în domeniul Electronică și Telecomunicații, programul de studii
+Tehnologii și Sisteme de Telecomunicații este scrisă de mine și nu a mai fost
+prezentată niciodată la o facultate sau
+instituție de învățămînt superior din țară sau străinătate.
+
+\vfill
+
+Declar că toate sursele utilizate, inclusiv cele de pe Internet, sunt indicate în
+lucrare, ca referințe bibliografice. Fragmentele de text din alte surse, reproduse exact,
+chiar și în traducere proprie din altă limbă, sunt scrise între ghilimele și fac referință
+la sursă. Reformularea în cuvinte proprii a textelor scrise de către alți autori face
+referință la sursă. Înțeleg că plagiatul constituie infracțiune și se sancționează
+conform legilor în vigoare.
+
+\vfill
+
+Declar că toate rezultatele simulărilor, experimentelor și măsurătorilor pe care
+le prezint ca fiind făcute de mine, precum și metodele prin care au fost obținute, sunt
+reale și provin din respectivele simulări, experimente și măsurători. Înțeleg că
+falsificarea datelor și rezultatelor constituie fraudă și se sancționează conform
+regulamentelor în vigoare.
+
+\vfill
+\vfill
+\vfill\noindent
+\begin{minipage}[t]{0.49\textwidth}
+\flushleft
+București, 27-06-2024
+\end{minipage}
+~
+\begin{minipage}[t]{0.49\textwidth}
+\flushright
+Absolvent Vlad MOREANU
+\end{minipage}
+
+\vfill
+\vfill
+\vfill
+\vfill
+
+}
+
+\emptypage{
+\noindent
+\begin{minipage}[t]{\textwidth}
+\flushright
+Anexa 6
+\end{minipage}
+
+\vfill
+\vfill
+
+\Large
+\noindent
+Copyright © 2024 , Vlad Moreanu
+
+\vfill
+\noindent
+Toate drepturile rezervate
+
+\vfill
+\noindent
+Autorul acordă UPB dreptul de a reproduce și de a distribui public copii pe hîrtie sau
+electronice ale acestei lucrări, în formă integrală sau parțială
+
+\vfill
+\vfill
+\vfill
+\vfill
+\vfill
+\vfill
+\vfill
+\vfill
+\vfill
+\vfill
+\vfill
+\vfill
+\vfill
+}
+
+\emptypage\tableofcontents
+
+\emptypage\listoffigures
+
+\emptypage\listoftables
+
+\emptypage{\printacronyms[display=all]\addcontentsline{toc}{chapter}{Acronyms}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --- INTRODUCTION ----------------------------------------------------------- %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagestyle{plain}
+\chapter{Introduction}
+
+Audio systems form a large portion of the electronic equipment that people
+interact with on a daily basis. From mobile phones, to desktop computers, to
+car radios, there is almost always a device nearby that is able to reproduce
+recorded sounds, which is not surprising since both speech and music are
+omnipresent aspects throughout history and across all cultures.
+
+Despite this, specialised audio equipment (like amplifiers, speakers, mixing
+boards, effects units, etc.) are often prohibitive in terms of cost and number
+of devices, even those marketed towards amateur musicians or audiophiles.
+Advancements in digital technologies have offered alternatives to a selection
+of such equipment: mixing and effects are prime necessities in \ac{daw}
+software, but dedicated hardware is still required to convert the analog
+signals, from microphones or from instruments, into a digital format which the
+\ac{daw} can then process.
+
+\begin{figure}[H]
+    \center
+    \includegraphics[width=0.8\textwidth]{media/sigchain}
+    \caption{A typical analog signal chain}
+    \label{fig:sigchain}
+\end{figure}
+
+To better illustrate the advantages of using a \ac{daw}, a short presentation
+of a signal chain for fully analog processing is necessary. Figure
+\ref{fig:sigchain} represents the steps of such a chain:
+firstly, the signal source (an electric instrument or a microphone) is
+connected to a preamplifier (or preamp) to boost the signal to a level which
+allows adequate processing with minimal noise.
+Secondly, the output of the preamp is fed into the mixer, which will route the
+signal to the effects units and receive it again, for the mixing stage
+(represented by the master channel).
+Finally, the mixer's output signal can be sent to either speakers or to a tape
+recorder, or to both at the same time.
+Use of digital alternatives considerably reduces the number of physical devices
+in a signal chain:
+the \ac{daw} handles mixing, effects and recording while also featuring digital
+synthesizers for \ac{midi}, without the need for physical space, or
+the risk of the equipment degrading in time, that the analog counterparts
+present, making it a desirable option in a recording environment.
+
+On the other hand, the main disadvantage of such digital sound processing is
+the latency it can introduce. Varying with the available and needed processing
+power of the \ac{daw}, the delay between the input and output signals can be
+anywhere from a few milliseconds to a few hundred milliseconds, making it an
+inadequate solution in most live scenarios. Amateur musicians, however, playing
+and recording at home, are unlikely to use so much digital processing as to
+create a noticeable latency in the signal chain.
+
+\section{The motivation of the thesis}
+
+Given the advantages that digital audio processing offers, as well as the
+requirements imposed by a home studio environment, a hybrid solution, merging
+an analog mixer and an interface, can offer both the flexibility of purely
+analog signal chains and the convenience of digital processing, in a package of
+small dimensions which can be set up with ease, which is likely to make such a
+solution popular among amateur musicians.
+
+The price and quality of such an equipment is also a main point of interest,
+it's necessary to offer an affordable product that can process and transmit a
+clean sound, as well as make efficient use of the supplied power.
+
+\section{Specifications and original contributions}
+
+The circuit design and simulation of the hardware aspect of the thesis will be
+realised using SIMetrix. The \ac{pcb} design will be realised using KiCAD, the
+physical boards will have two copper layers with a layer of dielectric made of
+FR4 material. The purpose of the device is to succesfully accept analog
+audio inputs, convert them to a digital format for processing in a DAW, and mix
+the audio signals and output the result. A dynamic range of at least 80dB, is
+of interest.
+
+The original contributions brought by this thesis are:
+\begin{itemize}
+    \item The design, simulation and physical implementation with monolithic
+        components of the audio mixer with three stereo channels;
+    \item The design and implementation of the hardware
+        aspects of the audio interface.
+    \item The physical measurement of the final product and the subsequent
+        evaluation of the performance parameters against the imposed
+        specifications.
+\end{itemize}
+
+\section{Structure of the thesis}
+
+This introductory chapter presented an overview of the common processing steps
+of audio signals and the reasoning behind the development of the equipment, as
+well as the specifications to which the equipment has to conform to.
+The original contributions and the structure of the thesis have also been
+presented.
+
+The following chapters will provide the theoretical aspects necessary to
+understanding the design stage of the project, covering the standard hardware
+configurations in use today and defining the performance characteristics of
+audio mixers and interfaces.
+
+The chapters after these will cover the design, simulation and physical
+implementation of the hardware components.
+
+The last chapter will conclude the concepts presented in the whole thesis, as
+well as providing possible improvements and alternative solutions to the design
+of the equipment. At the end of the chapter, a complete bibliography will be
+provided as well annexes for complete schematics of the hardware components.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --- THEORETICAL ASPECTS ---------------------------------------------------- %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\include{C2.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --- IMPLEMENTATION --------------------------------------------------------- %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\include{C3.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --- CONCLUSIONS ------------------------------------------------------------ %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Conclusions}
+
+The first chapter represents a brief overview of audio equipment, both past and
+present, with emphasis on the advantages and disadvantages of both analog and
+digital audio processing techniques. The motivation of this thesis, the
+structure and the specifications of the implemented equipment were also
+presented.
+
+The second chapter covered the theoretical aspects necessary for implementing
+audio production equipment, emphasizing aspects about audio signals, noise
+sources in audio circuitry, opamp and their configurations and audio mixer
+architecture as well as the physical limitations that have to be taken into
+account when taking the step from schematics to physical implementation.
+Discussion of advantages and disadvantages of the configurations were also
+introduced when warranted.
+As such, this chapter elaborates on the parameters of audio
+equipment, such as noise floor, headroom, dynamic range, input and output
+impedances, on the parameters of the operational amplifiers which are used in
+the circuitry, on their possible configurations and the viability of their uses
+in audio equipment, on the two types of architectures (split mixing and
+in-line) and the different modules that form an audio mixer (the two variations
+of the channel modules, the master module, the effect return and group
+modules), on the necessity of minimising channel crosstalk on the pcb and in
+cables as well as methods of reducing it and the importance of track and cable
+resistances.
+
+The third chapter covers the design steps and physical implementation of the
+mixer, covering the analog modules and the digital sections of the circuit.
+The analog modules followed a simplified version of the split-mixing
+architecture and they present adequate impedances at both the inputs and output
+of the circuitry and have adequate values for noise floor, signal to noise
+ratio, headroom and dynamic range, as seen in the simulation results. The
+schematics for all sections were realised with the device electrical
+characteristics and the manufacturer recommendations in mind. The PCB layout
+was also realised considering all the effects listed in Chapter 2.
+
+The following table shows the parameters of interest achieved in simulations
+versus the specified requirements:
+
+\begin{table}[H] \center
+    \begin{tabular}{
+            c c c
+        }
+        \hline\hline
+        Parameter
+        & Spec
+        & Simulation\\
+        \hline\hline
+        Dynamic Range
+        & 80dB
+        & 101dB\\
+        \hline
+        Signal to Noise Ratio
+        & 80dB
+        & 84dB\\
+        \hline
+        Headroom
+        & 16dB
+        & 17dB\\
+        \hline
+        Input impedance
+        & 10k\textOmega
+        & 11k\textOmega\\
+        \hline
+        Output impedance
+        & 600\textOmega
+        & 350\textOmega\\
+        \hline\hline
+    \end{tabular}
+    \caption{Performance parameters in simulation vs. spec}
+    \label{table:parameters}
+\end{table}
+
+\newpage
+\section{Further development}
+
+Since the PCB is not fully assembled at the time of writing, the first
+development would be finishing the assembly of the board, and measuring the
+performance of the stages, in a manner similar to that used in the simulations.
+Finishing the board assembly translates to placing the components for the
+remaining two channel modules and the master module.
+Measuring the performance of the device involves modifying the layout to allow
+the connection of a Bode Analyzer to the board at multiple points. More
+concretely, a 50\textOmega resistor needs to be added at every stage input, to
+connect the AC disturbance source to it, pin headers need to be added at every
+input and output and in between the stages to be able to measure the frequency
+response.
+
+Furthermore, several design choices in this project have yielded less than
+ideal results, as seen in chapter 3.
+In order to remedy that, some options for further development are available,
+examples include:
+
+\begin{itemize}
+    \item Using Baxandall configurations for the EQ section, which
+        have transfer functions that are symmetrical to the 0dB line when
+        adjusting the potentiometers and also have more consistent frequency
+        bands.
+    \item Adding more input connectors, like XLR and TS/TRS Jack,
+        for microphones or instruments, as well as the possibility to connect
+        mono audio sources, both balanced and unbalanced, with corresponding
+        preamplifier sections.
+    \item Adding switches to bypass the audio codecs, if they are not needed,
+        or to mute channels.
+    \item Using a PCB with more than two layers to make routing easier.
+    \item Using opamps with larger and differential supply voltages, to
+        increase the headroom.
+    \item Using a USB hub with a shorter transfer time, to reduce delays.
+\end{itemize}
+
+
+\printbibliography
+\addcontentsline{toc}{chapter}{Bibliography}
+
+\end{document}

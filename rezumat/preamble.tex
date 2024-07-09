@@ -1,0 +1,99 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --- PREAMBLE --------------------------------------------------------------- %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt, a4paper]{report}
+\usepackage{newtxtext}
+\usepackage{textgreek}
+
+\usepackage[margin=1in]{geometry}
+
+\usepackage{amsmath}
+
+\usepackage{minted}
+\usepackage{mdframed}
+\definecolor{bg}{rgb}{0.90,0.90,0.90}
+
+\usepackage{subcaption}
+
+\usepackage{authblk}
+
+\usepackage[]{graphicx}
+\usepackage{pgfplots}
+\usepackage{pdfpages}
+\usepackage[inkscapeformat=png]{svg}
+\usepackage{circuitikz}
+\usepackage{array}
+
+\usepackage{lipsum}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --- FONT SIZES ------------------------------------------------------------- %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand   \footnotesize   {\fontsize{ 8pt}{ 9.6pt}\selectfont}
+\renewcommand   \small          {\fontsize{10pt}{  12pt}\selectfont}
+\renewcommand   \normalsize     {\fontsize{12pt}{14.4pt}\selectfont}
+\renewcommand   \large          {\fontsize{14pt}{16.8pt}\selectfont}
+\renewcommand   \Large          {\fontsize{16pt}{19.2pt}\selectfont}
+\renewcommand   \LARGE          {\fontsize{18pt}{21.6pt}\selectfont}
+\renewcommand   \huge           {\fontsize{20pt}{  24pt}\selectfont}
+\renewcommand   \Huge           {\fontsize{22pt}{26.4pt}\selectfont}
+\newcommand     \HUGE           {\fontsize{24pt}{28.8pt}\selectfont}
+
+\newcommand     \sub            \textsubscript
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --- PARAGRAPH SPACING ------------------------------------------------------ %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[skip=\baselineskip]{parskip}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --- TITLE FORMATTING ------------------------------------------------------- %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{titlesec}
+
+\titleformat{\chapter}{
+    \bf
+    \huge
+}{\thechapter}{1pt}{ }
+\titlespacing{\chapter}{0pt}{2ex}{1ex}
+
+\titleformat{\section}{
+    \bf
+    \LARGE
+}{\thesection}{1pt}{ }
+
+\titlespacing{\section}{0pt}{2ex}{1ex}
+
+\titleformat{\subsection}{
+    \bf
+    \Large
+}{\thesubsection}{1pt}{ }
+\titlespacing{\subsection}{0pt}{2ex}{1ex}
+
+\titleformat{\subsubsection}{
+    \bf
+    \large
+}{\thesubsubsection}{1pt}{ }
+\titlespacing{\subsubsection}{0pt}{2ex}{1ex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --- ANNEX RELATED ---------------------------------------------------------- %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{acro}
+
+\usepackage{hyperref}
+\hypersetup{
+    pdftitle=Documentation,
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=black,
+    citecolor=black,
+    urlcolor=cyan,
+}
+

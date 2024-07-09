@@ -1,0 +1,68 @@
+\input{preamble.tex}
+
+
+\begin{document}
+
+\pagenumbering{gobble}
+
+The summary of the diploma project of the student:
+MOREANU P.D. Vlad-Ștefan, group 441G
+
+Study program: Telecommunication systems and technologies
+
+{\HUGE Three channel stereo audio mixer}
+
+Scientific coordinators:
+Prof. dr. ing. Monica Dascălu;
+As. drd. ing. Costin-Andrei Brătan
+
+Project goals: The purpose of the project is the practical implementation,
+with discrete components of the audio mixer with output of both the mixed analog
+audio and channel inputs as digital signals, meant to be transferred via USB to
+a PC workstation for digital processing. Each channel will have a three band
+equalisation stage (before mixing) and the analog to digital conversion will
+respect the CD Audio standard specifications.
+The project involves two design stages with the goal of measuring the
+performance parameters of the audio mixer. The first stage consists of a
+theoretical model, created in the SIMetrix simulation engine. The second stage
+is the practical implementation of the mixer, requiring the design of a PCB on
+which the required circuitry will be assembled. For the design, the KiCAD PCB
+editor is used.
+
+Project development and results: A simulation schematic was created in SIMetrix
+v9.1 according to common mixer architecture and design principles. Given the
+limitations imposed by the thesis of the project, the model was created while
+taking into account the non-ideal elements of common design such as noise,
+supply voltages, limited headroom and input and output impedances.
+
+\begin{figure}[h]
+    \center
+    \includegraphics[width=\textwidth]{media/sim_preamp-in}
+    \caption{Example of simulation results: The circuit input impedance}
+\end{figure}
+
+After the completion and analysis of the theoretical model, the PCB layout was
+created in KiCAD v8.0, while trying to minimise effects such as channel
+crosstalk. The board seen at \ref{fig:front} was created according to the
+schematic seen at \ref{fig:sch}.
+
+\begin{figure}[H]
+    \center
+    \includesvg[width=\textwidth]{media/Design}
+    \caption{Hierarchic schematic which was implemented}
+    \label{fig:sch}
+\end{figure}
+
+\begin{figure}[H]
+    \center
+    \includegraphics[width=\textwidth]{media/PCB_front}
+    \caption{The front side of the PCB}
+    \label{fig:front}
+\end{figure}
+
+
+
+
+\end{document}
+
+

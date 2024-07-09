@@ -1,2 +1,6 @@
 Design/Design-backups/
 
+Documentation/*
+!Documentation/*.bib
+!Documentation/*.tex
+!Documentation/*.pdf

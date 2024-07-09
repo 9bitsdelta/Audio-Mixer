@@ -1,0 +1,413 @@
+\chapter{Design choices, schematics, simulations and physical implementation}
+
+\begin{figure}[H]
+    \center
+    \includesvg[height=0.81\textheight]{media/Design}
+    \caption{Hierarchical schematic of the implemented mixer}
+    \label{fig:sch_root}
+\end{figure}
+
+The chosen architecture for the project is the split-mixer architecture, with
+only channel modules and a master module. Since the project also implements the
+functionality of an audio interface, groups and auxiliary inputs and outputs
+have been omitted.
+
+Figure \ref{fig:sch_root} shows the modules of the implemented mixer and how
+they will be connected together.
+The three channel inputs and the output are connected with consumer line lebel
+unbalanced audio RCA jacks. All the modules are implemented on the same PCB
+and, as such, are connected together with tracks.
+
+The following design considerations will apply to all the modules described in
+the following sections:
+\begin{itemize}
+    \item All opamp ICs presented are part of the LMV3xx family,
+        either the LMV358 or  LMV324 which are dual opamps and quad opamps
+        respectively.\cite{lmv3xx}
+    \item The whole board will be powered from the USB connection, a maximum
+        voltage of 5V and maximum current of 500mA. An LDO regulator is used to
+        power all the circuits at 3.3V.
+    \item The internal level used by the mixer was chosen to be -16dBV, lower
+        than the line level. This is necessary to avoid clipping.
+    \item The 3.3V supply of the opamps converts to an ideal maximum signal
+        level of 1.17V\sub{RMS} or +1.36dBV. This translates into a headroom of
+        17.36dB. All the stages in the modules were calibrated for a maximum
+        gain of 10dB, giving a maximum implemented signal level of -6dBV, a
+        level that is theoretically low enough to minimise the risk of
+        clipping.
+\end{itemize}
+
+\section{The Channel Module}
+
+\begin{figure}[H]
+    \center
+    \includesvg[width=\textwidth]{media/Design-PREAMP-EQ_L1}
+    \caption{Hierarchical schematic of half of the stereo channel module}
+    \label{fig:sch_channel}
+\end{figure}
+
+The implemented channel module seen in figure \ref{fig:sch_channel} consists of
+an input stage and an EQ stage, interconnected with the stereo audio codec.
+
+The input stage begins with a DC blocking capacitor (C19 in the figure)
+connected to a voltage divider (R9 and R10) further connected to the input of
+an inverting amplifier (U2A). The DC blocking capacitor and the voltage divider
+add a DC component to the input signal, while the inverting amplifier presents
+an adequate impedance for a line in connection and brings the signal level down
+to.
+The inverse phase shifting
+introduced by the first opamp is then corrected by the second opamp (U2B) in
+the stage, which also controls the gain of the signal through the potentiometer
+(RV1). The output of this stage is then sent to the audio codec section.
+
+The EQ stage receives its signals from the output of the audio codec.
+It consists of three parallel integration and derivation opamp configurations
+(U3A, B and C), each of them acting as a band pass filter, with bands 20Hz to
+200Hz, 200Hz-2kHz, 2kHz-20kHz. The fourth opamp (U3C) is in an inverting summer
+configuration, adding together the outputs of the three filters. Fader RV5 acts
+as a volume control for the channel, before the mixing stage.
+
+\begin{figure}[H]
+    \center
+    \includegraphics[width=\textwidth]{media/sim_preamp-ac}
+    \caption{Multi-step AC simulation of the input stage}
+    \label{fig:sim_preamp-ac}
+\end{figure}
+
+Figure \ref{fig:sim_preamp-ac} shows the frequency response of the input stage
+for different wiper positions on the potentiometer.
+The 0dB reference in this graph is line level. The different plots have no
+distinct curvature, meaning the audio signals pass through the circuit
+unaltered except for amplitude, as intended.
+
+\begin{figure}[H]
+    \center
+    \includegraphics[width=\textwidth]{media/sim_preamp-in}
+    \caption{Simulation of the input impedance of the input stage}
+    \label{fig:sim_preamp-in}
+\end{figure}
+
+\begin{figure}[H]
+    \center
+    \includegraphics[width=\textwidth]{media/sim_preamp-out}
+    \caption{Simulation of the output impedance of the input stage}
+    \label{fig:sim_preamp-out}
+\end{figure}
+
+Figures \ref{fig:sim_preamp-in} and \ref{fig:sim_preamp-out} show the
+input and output impedances of the stage varying with the frequency.
+Each curve corresponds to a different setting of the potentiometer.
+Both graphs suggest that the impedances are within the specifications.
+
+\begin{figure}[H]
+    \center
+    \includegraphics[width=\textwidth]{media/sim_preamp-noise}
+    \caption{Simulation of the noise spectrum in the preamp stage}
+    \label{fig:sim_preamp-noise}
+\end{figure}
+
+Using the available noise analysis tools in SIMetrix, the power spectrum can
+be obtained, seen in figure \ref{fig:sim_preamp-noise} and the total noise of
+this stage can be computed and will be -103.46dBV.
+
+\begin{figure}[H]
+    \center
+    \includegraphics[width=\textwidth]{media/sim_eq-ac-low}
+    \caption{Low frequencies boost/cut}
+    \label{fig:sim_eq-low}
+\end{figure}
+
+\begin{figure}[H]
+    \center
+    \includegraphics[width=\textwidth]{media/sim_eq-ac-mid}
+    \caption{Mid frequencies boost/cut}
+    \label{fig:sim_eq-mid}
+\end{figure}
+
+\begin{figure}[H]
+    \center
+    \includegraphics[width=\textwidth]{media/sim_eq-ac-high}
+    \caption{High frequencies boost/cut}
+    \label{fig:sim_eq-high}
+\end{figure}
+
+Figures \ref{fig:sim_eq-low}, \ref{fig:sim_eq-mid} and \ref{fig:sim_eq-high}
+show the frequency response of the EQ section for different frequency bands and
+different potentiometer settings. Since the integration and derivation opamp
+configuration is, in essence, a high-pass filter followed by a low-pass filter,
+it's only natural that towards the ends of the spectrum the amplitude will
+always be lower. The location of the poles and zeroes of the transfer functions
+also shift with the potentiometer settings.
+
+\begin{figure}[H]
+    \center
+    \includegraphics[width=\textwidth]{media/sim_eq-in}
+    \caption{Input impedance of the EQ stage}
+    \label{fig:sim_eq-in}
+\end{figure}
+
+\begin{figure}[H]
+    \center
+    \includegraphics[width=\textwidth]{media/sim_eq-out}
+    \caption{Output impedance of the EQ stage}
+    \label{fig:sim_eq-out}
+\end{figure}
+
+Figures \ref{fig:sim_eq-in} and \ref{fig:sim_eq-out} show the input and output
+impedances of the EQ stage, varying with frequency. The input impedance is
+lower than typical for line level inputs, but not such that it will
+categorically cause overloading of the codec's output. The output impedance on
+on the other hand (measured at the opamp output, before the fader) is more than
+adequate to drive the following stage.
+
+\begin{figure}[H]
+    \center
+    \includegraphics[width=\textwidth]{media/sim_eq-noise}
+    \caption{Simulation of the noise spectrum in the EQ stage}
+    \label{fig:sim_eq-noise}
+\end{figure}
+
+Using the available noise analysis tools in SIMetrix, the power spectrum can
+be obtained, seen in figure \ref{fig:sim_eq-noise} and the total noise of
+this stage can be computed and will be -105.69dBV.
+
+
+\section{The Master Module}
+
+\begin{figure}[H]
+    \center
+    \includesvg[width=\textwidth]{media/Design-MASTER_L}
+    \caption{Hierarchical schematic of half of the master module}
+    \label{fig:sch_master}
+\end{figure}
+
+The master module presented in \ref{fig:sch_master}, similarly to the channel
+modules, begins with DC blocking capacitors and resistive voltage dividers which
+re-center the received signal on the necessary DC component. Then the inverting
+summer (opamp U16A in the figure) adds together the three channels, and sends
+the resulting signal through the fader acting as a volume control (RV16) and
+further on, to a final opamp stage (U16B) which presents and adequate impedance
+for a line out connection.
+
+\begin{figure}[H]
+    \center
+    \includegraphics[width=\textwidth]{media/sim_master-ac}
+    \caption{AC simulation of the master stage}
+    \label{fig:sim_master-ac}
+\end{figure}
+
+As with the preamplifier stage, the frequency response of the master module
+needs to be as flat as possible, since it is only meant to sum the signals
+coming from the three channels. Figure \ref{fig:sim_master-ac} shows the
+frequency response of the stage for a single active input. If all inputs were
+active, the resulting curve would show a gain of 3 or roughly 10dB
+(the sum of the three AC voltage sources, one connected to each input, being
+three times higher than the signal coming through a single channel).
+In practical terms, this would be a reflection of three signals that occupy the
+whole audio spectrum, raising the chance of clipping. This is slightly
+unrealistic in a studio scenario:
+Ideally, in a studio, each channel (representing different instruments or
+voices) will occupy a different frequency band, the result being a signal that
+occupies the whole spectrum. A channel outputting a signal that occupies the
+whole spectrum would mean a song, or something similar, is playing
+through that channel, something that is more likely to happen in a live
+scenario, such as PA or radio broadcast, where accompanying music would be
+played.
+
+\begin{figure}[H]
+    \center
+    \includegraphics[width=\textwidth]{media/sim_master-in}
+    \caption{Simulation of the input impedance of the master stage}
+    \label{fig:sim_master-in}
+\end{figure}
+
+\begin{figure}[H]
+    \center
+    \includegraphics[width=\textwidth]{media/sim_master-out}
+    \caption{Simulation of the output impedance of the master stage}
+    \label{fig:sim_master-out}
+\end{figure}
+
+Figures \ref{fig:sim_master-in} and \ref{fig:sim_master-out} show the input and
+output impedances of this stange. As in the case of the channel module, the
+output impedance is within the specifications of line level output, and the
+input impedance is more than adequate to be driven by the EQ stage that
+precedes it.
+
+\begin{figure}[H]
+    \center
+    \includegraphics[width=\textwidth]{media/sim_master-noise}
+    \caption{Simulation of the noise spectrum in the master module}
+    \label{fig:sim_master-noise}
+\end{figure}
+
+Using the available noise analysis tools in SIMetrix, the power spectrum can
+be obtained, seen in figure \ref{fig:sim_master-noise} and the total noise of
+this stage can be computed and will be -106.61dBV.
+
+
+\section{Audio Codec Section}
+
+\begin{figure}[H]
+    \center
+    \includesvg[width=\textwidth]{media/Design-PCM1}
+    \caption{Hierarchical schematic of the audio codec circuitry}
+    \label{fig:sch_codec}
+\end{figure}
+
+This section is realised using the PCM2903C integrated circuit.
+The PCM2903C is a single-chip USB audio codec designed for various audio
+applications, including audio recording and playback devices.
+It integrates USB transceiver functionality, stereo ADC, stereo DAC, and an
+audio interface into a single device.
+
+The USB audio interface is compliant with USB 2.0 full speed technology (a
+maximum transfer rate of 12Mbps) and supports USB HID (Human Interface Device)
+for audio controls.
+
+The ADC and DAC both support 16-bit resolution and sampling rates of up to
+48kHz. In terms of audio performance, the typical SNR values are 89dB for the
+ADC and 96dB for the DAC and the dynamic ranges are 89dB and 93dB respectively.
+Both the ADC and the DAC conform with
+consumer line level signals, and present the necessary impedances.
+
+In terms of power management, it is powered from single supply of 3.3V and
+draws a current of 54mA during operation.
+\cite{pcm}
+
+\begin{figure}[H]
+    \center
+    \includegraphics[width=\textwidth]{media/pcm-startup}
+    \caption{Startup of the PCM2903C}
+    \label{fig:pcm-startup}
+\end{figure}
+
+For the implementation, seen in figure \ref{fig:sch_codec} the power input pins
+are all connected with decoupling
+capacitors to filter low frequency power supply noise. The integrated circuit
+features a crystal oscillator and requires an external crystal resonator
+(Y1 in the schematic) in order to function. The data transmission is
+handled by a differential pair, connected at pins 1 and 2 (D+ and D-) of the
+device. Both pins are connected to decoupling capacitors and the D+ also
+features a pullup resistor for correct functioning. Pin SEL1 triggers the
+integrated circuit's reset procedure, preparing it for functioning, as seen
+in figure \ref{fig:pcm-startup}, as such it is connected to an RC network to
+delay the procedure until after the power is supplied to the circuit.
+The analog audio pins all feature DC blocking capacitors to prevent any DC
+components or noise from passing through to the ADC or out from the DAC.
+
+\section{USB Hub Section}
+
+\begin{figure}[H]
+    \center
+    \includesvg[width=0.8\textwidth]{media/Design-USB HUB}
+    \caption{Hierarchical schematic of the USB hub circuitry}
+    \label{fig:sch_usbhub}
+\end{figure}
+
+The TUSB2046 is a 4-port USB 1.1 hub controller that allows for the expansion
+of a single USB port into four downstream ports. It is designed for embedded
+systems and peripheral devices requiring multiple USB connections. The device
+complies with the USB 1.1 standard and supports both full-speed (12 Mbps).
+
+In terms of power management, the integrated circuit is powered from a single
+supply of 3.3V and draws a maximum current of 40mA.
+\cite{tusb}
+All power pins are similarly connected with decoupling capacitors to filter
+power supply noise, as seen in figure \ref{fig:sch_usbhub}.
+This integrated circuit also features a crystal oscillator
+that requires an external crystal resonator to function properly (Y4 in the
+schematic). Since only three channels are implemented, only three of the
+downstream data pins of this device are used, the last differential pair is
+connected to ground with two resistors (pins 23 and 24). All the downstream
+data pins are otherwise connected simliarly to the PCM2903C data pins, with
+decoupling capacitors and pull down resistors. The upstream data pins again
+follow the same pattern and are further connected to the mini USB type B port.
+Pin 4 of this device acts as enable pin and is also connected to an RC network
+that controls delays the startup of circuit.
+In terms of transfer rate, since each codec produces 16-bit stereo samples and
+48000 samples per second, the total necessary bandwidth is 9.2Mbps for
+bidirectional communication, less than the available 12Mbps offered by the
+integrated circuits. Furthermore, the total delay introduced by the digital
+communication on the board is 4ms, 2 upstream transfers and 2 downstream
+transfers, each of needing 1ms to be accomplished, as defined by the USB full
+speed standard\cite{usb20}.
+
+For power, the MCP1703A low dropout voltage regulator was used. It supplies the
+whole board with 3.3V obtained from the 5V bus pin of the USB port. It supplies
+a maximum current of 250mA, more than the 202mA necessary for the operation of
+the codecs and the usb hub circuits, with enough room to power the analog
+circuitry as well.
+
+\section{PCB Layout}
+
+\vfill
+\begin{figure}[H]
+    \center
+    \includegraphics[width=\textwidth]{media/PCB_front}
+    \caption{Front view of the PCB}
+    \label{fig:pcb_front}
+\end{figure}
+\vfill
+\begin{figure}[H]
+    \center
+    \includegraphics[width=\textwidth]{media/PCB_back}
+    \caption{Back view of the PCB}
+    \label{fig:pcb_back}
+\end{figure}
+
+The PCB reflects the split-mixer architecture, the three channels are placed to
+the left of the master module, the total size is 200mm by 146.5mm.
+It features ground planes on both copper layers,
+screening most of the tracks from crosstalk.
+
+The front layer features all the digital components on the board while to back
+layer features most of the analog components, effectively isolating the two
+return paths of the signals from each other, to minimise the noise.
+
+The three cannel modules are also copies of each
+other, and all operational amplifiers are process only a single side of the
+stereo audio signals, minimising crosstalk between the stereo channels and
+between the two sides of each individual channel.
+
+Furthermore, the tracks are 1oz copper (35 microns thick) and their widths are
+0.3mm for tracks carrying signals and 0.4mm for power supply tracks. This
+results in a resistance of
+$1.6\frac{\Omega}{\text{m}}$ for the signal tracks and
+$1.2\frac{\Omega}{\text{m}}$ for the power supply tracks.
+Given the dimensions of the board, the maximum length of any straight track
+can't be more than 200mm, and the resistance of that track will be at most
+0.32\textOmega for signal tracks. Given the fact that most input impedances
+were designed to be in the magnitude of tens of kiloOhms, voltage mismatch
+between stages as a result of track resistance will be minimal.
+
+For the differential pairs between the digital components, care was taken such
+that each pair is screened from others and that they cross as few of the
+analog signal tracks as possible.
+
+All passive components were placed as close as possible to the integrated
+circuits on both sides of the board, the exception being the potentiometers and
+the faders.
+
+As of the 27th of June, the board was not completely assembled. Out of the 410
+components, only around 150 were placed on the board, covering one channel
+module with the associated codec section and the usb hub section. Figures
+\ref{fig:statfront} and \ref{fig:statback} show the partial assembly of the
+board.
+
+\begin{figure}[h]
+    \center
+    \includegraphics[width=\textwidth]{media/pcblicenta2}
+    \caption{Assembly of the front side of the PCB}
+    \label{fig:statfront}
+\end{figure}
+
+\begin{figure}[h]
+    \center
+    \includegraphics[width=\textwidth]{media/pcblicenta1}
+    \caption{Assembly of the back side of the PCB}
+    \label{fig:statback}
+\end{figure}
+
+
+
